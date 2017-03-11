@@ -51,9 +51,9 @@ class App extends Component {
   } //end CWM
 
   render() {
-//    console.log('IMPORT j:', json)
-    console.log('j:', this.state.json)
-    console.log('data', this.state.data2)
+//    console.log('IMPORT json:', json)
+    console.log('APP json:', this.state.json)
+    console.log('APP data', this.state.data2)
 
     return (
       <div>

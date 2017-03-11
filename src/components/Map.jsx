@@ -30,7 +30,7 @@ export default (props) => {
     path: path(props),
   }
 
-  console.log('props-sp', props)
+//  console.log('MAP props', props)
 
   return (
     <svg width={props.width} height={props.height}>
