@@ -1,24 +1,22 @@
 import React from 'react'
 
 const renderPaths = (props) => {
-  console.log('PATH props:', props)
+//  console.log('PATH props:', props)
 //  console.log('PATH props.json:', props.json)
 
   return (stateObj, index) => {
 //    console.log('stateObjPro:', stateObj.properties)
 
     let strokeColor = null
-    if (stateObj.properties.name === 'Yucatan') {
-      strokeColor = 'limeGreen'
-    } else if (stateObj.properties.name === 'Sonora') {
-      strokeColor = 'indigo'
+    if (stateObj.properties.NAMELSAD === 'Elko County') {
+      strokeColor = 'dodgerBlue'
     } else {
-      strokeColor = 'silver'
+      strokeColor = 'white'
     }
 
     const pathProps = {
       d: props.path(stateObj),
-      fill: props.color(stateObj.properties.homicide),
+      fill: props.color(stateObj.properties.value),
       stroke: strokeColor,
       opacity: 1.0,
       key: index,
@@ -27,7 +25,7 @@ const renderPaths = (props) => {
     return (
       <path {...pathProps} >
         <title>
-          {stateObj.properties.name}: {stateObj.properties.homicide}
+          {stateObj.properties.NAMELSAD}: {stateObj.properties.value}
         </title>
       </path>
     )
@@ -39,7 +37,7 @@ export default (props) => {
     return <p>Loading...</p>
   }
 
-  console.log('PATH props.json:', props.json)
+//  console.log('PATH props.json:', props.json)
 
   return (
     <g>
