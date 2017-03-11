@@ -17,42 +17,56 @@ class App extends Component {
     this.state = {
       json: null,
       data2: null,
-//      json2: {},
+//      json2: null,
 //      req: null,
     } //end of state
   } //end constructor
 
   componentWillMount() {
     let cmp = this
-    const year = 2010
 
     d3.queue()
-      .defer(d3.json, 'https://gist.githubusercontent.com/mendozaline/225de8323932c72ca81d/raw/88fb99945f88d84162c47240aa5cf42bbbce95e1/mexicanStates.json')
-      .defer(d3.csv, 'https://gist.githubusercontent.com/mendozaline/225de8323932c72ca81d/raw/88fb99945f88d84162c47240aa5cf42bbbce95e1/mexico.csv')
-//      .defer(d3.json, "http://api.census.gov/data/2015/acs1?get=NAME,B01001_002E&for=county:*&in=state:08&key=26b5b4ec082f175445482165de0fe191cc145d62")
+      .defer(d3.json, 'https://gist.githubusercontent.com/anonymous/3237a4869e2c17e4bd423fb624354363/raw/2ffa1a7d445b04f6dc8297584252009f342366e3/tl_2016_us_county.json')
+      .defer(d3.json, 'http://api.census.gov/data/2015/acs5?get=NAME,B01001B_031E&for=county:*&in=state:*&key=26b5b4ec082f175445482165de0fe191cc145d62')
 //      .defer(d3.request, "http://api.census.gov/data/2015/acs1?get=NAME,B01001_002E&for=county:*&in=state:08&key=26b5b4ec082f175445482165de0fe191cc145d62")
-
-      .await(function(error, us, data, json, req) {
+      .await(function(error, json, data) {
       //abstract into own fn and change data here
         for (var i = 0; i < data.length; i++) {
-          var dataCountryCode = data[i].state
-          var dataValue = +data[i][year]
+          //from the api
+          let apiCountyFIP = data[i][3]
+          let apiStateFIP = data[i][2]
+          var dataCountryCode =  apiCountyFIP + ', ' + apiStateFIP
+//          console.log('dataCountryCode:', dataCountryCode)
 
-          for (var j = 0; j < us.features.length; j++) {
-            var jsonCountryCode = us.features[j].properties.name
+          var dataValue = +data[i][1]
+//          console.log('dataValue:', dataValue)
 
-            if (dataCountryCode === jsonCountryCode) {
-              us.features[j].properties.homicide = dataValue
+          for (var j = 0; j < json.features.length; j++) {
+            //from geoJSON
+            let jsonCountyFIP = json.features[j].properties.COUNTYFP
+            let jsonStateFIP = json.features[j].properties.STATEFP
+            var jsonCountyCode = jsonCountyFIP + ', ' + jsonStateFIP
+
+            if (dataCountryCode === jsonCountyCode) {
+              json.features[j].properties.value = dataValue
 
               break
             }
           }
         }
 
+      console.log('data!', data)
+
+      let formatData = data.filter(arr => {
+        return arr[0] !== 'NAME'
+      })
+      console.log('forData!!!', formatData)
+
         cmp.setState({
-          json: us.features,
-          data2: data,
-//          json2: json,
+//          json: us.features,
+          json: json.features,
+          data2: formatData,
+//          json2: json.features,
 //          req: req,
         }) //end setState
       }) //end await
