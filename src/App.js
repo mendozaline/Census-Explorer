@@ -15,90 +15,81 @@ class App extends Component {
   constructor() {
     super()
 
+    this.callAPI = this.callAPI.bind(this)
+
     this.state = {
-      json: null,
-      data2: null,
-//      req: null,
+      apiJSON: null,
+      censusVariable: 'Please select a variable',
     } //end of state
   } //end constructor
 
-  componentWillMount() {
+  callAPI() {
     let cmp = this
 
-    let baseUrl = 'http://api.census.gov/data/2015/acs5?get=NAME,'
-    let variable = 'B01001I_002E' //hispanic men
-    let county =  '&for=county:*'
+    let baseURL = 'http://api.census.gov/data/2015/acs5?get=NAME,'
+    let censusVariable = this.state.censusVariable
+    let county = '&for=county:*'
     let state = '&in=state:*'
     let key = '&key=26b5b4ec082f175445482165de0fe191cc145d62'
-    let url = baseUrl + variable + county + state + key
+
+    let apiURL = baseURL + censusVariable + county + state + key
+    //console.log('APP apiURL:', apiURL)
+
+    const usaCountyJSON =  'https://gist.githubusercontent.com/anonymous/3237a4869e2c17e4bd423fb624354363/raw/2ffa1a7d445b04f6dc8297584252009f342366e3/tl_2016_us_county.json'
+
+    const totalUSPopulation = 'http://api.census.gov/data/2015/acs5?get=NAME,B01001_001E&for=county:*&in=state:*&key=26b5b4ec082f175445482165de0fe191cc145d62'
 
     d3.queue()
-      .defer(d3.json, 'https://gist.githubusercontent.com/anonymous/3237a4869e2c17e4bd423fb624354363/raw/2ffa1a7d445b04f6dc8297584252009f342366e3/tl_2016_us_county.json')
-      .defer(d3.json, url) //all his men
-      .defer(d3.json, 'http://api.census.gov/data/2015/acs5?get=NAME,B01001_001E&for=county:*&in=state:*&key=26b5b4ec082f175445482165de0fe191cc145d62') //all pop
-//      .defer(d3.request, "http://api.census.gov/data/2015/acs1?get=NAME,B01001_002E&for=county:*&in=state:08&key=26b5b4ec082f175445482165de0fe191cc145d62")
-      .await(function(error, json, data, data2) {
-      //Loops through data and adds value to match in json
-      //abstract into own fn and change data here
-      for (var i = 0; i < data.length; i++) {
+      .defer(d3.json, usaCountyJSON)
+      .defer(d3.json, apiURL)
+      .defer(d3.json, totalUSPopulation)
+      .await(function(error, usaJSON, apiData, popData) {
+        //Loops through data and adds value to match in usaJSON
+        for (var i = 0; i < apiData.length; i++) {
           //from the api
-          let apiCountyFIP = data[i][3]
-          let apiStateFIP = data[i][2]
-          var dataCountryCode =  apiCountyFIP + ', ' + apiStateFIP
-//          console.log('dataCountryCode:', dataCountryCode)
+          let apiCountyFIP = apiData[i][3]
+          let apiStateFIP = apiData[i][2]
+          let apiCountyCode = apiCountyFIP + ':' + apiStateFIP
+          //console.log('APP dataCountryCode:', dataCountryCode)
 
-          var dataValue1 = +data[i][1]
-          var dataValue2 = +data2[i][1]
-          var dataValue = (dataValue1/dataValue2) * 100
-//          console.log('dataValue:', dataValue)
+          let dataValue1 = +apiData[i][1]
+          let dataValue2 = +popData[i][1]
+          let percent = (dataValue1/dataValue2) * 100
+          //console.log('APP percent:', percent)
 
-          for (var j = 0; j < json.features.length; j++) {
+          for (var j = 0; j < usaJSON.features.length; j++) {
             //from geoJSON
-            let jsonCountyFIP = json.features[j].properties.COUNTYFP
-            let jsonStateFIP = json.features[j].properties.STATEFP
-            var jsonCountyCode = jsonCountyFIP + ', ' + jsonStateFIP
+            let jsonCountyFIP = usaJSON.features[j].properties.COUNTYFP
+            let jsonStateFIP = usaJSON.features[j].properties.STATEFP
+            let jsonCountyCode = jsonCountyFIP + ':' + jsonStateFIP
 
-            if (dataCountryCode === jsonCountyCode) {
-              json.features[j].properties.value = dataValue
-
+            if (apiCountyCode === jsonCountyCode) {
+              usaJSON.features[j].properties.apiValue = percent
               break
             }
           }
-      } //end for loops
 
-        //Remove header array from census data
-        console.log('unformattedData:', data)
-        let formatData = data.filter(arr => {
-          return arr[0] !== 'NAME'
-        })
-        console.log('formattedData:', formatData)
+        } //end for loops
 
         cmp.setState({
-          json: json.features,
-          data2: formatData,
+          apiJSON: usaJSON.features,
         }) //end setState
-      }) //end await
-  } //end CWM
+    }) //end await
+  } //end callAPI
+
+//  componentWillMount() {
+//    this.callAPI()
+//  }
 
   render() {
-//    console.log('IMPORT json:', json)
-//    let response = null
-//    if (this.state.req !== null) {
-//      response = this.state.req.response
-//      response = JSON.parse(response)
-//    }
 
-    console.log('APP json:', this.state.json)
-    console.log('APP data:', this.state.data2)
-//    console.log('APP req:', response)
-//    console.log('APP json2', this.state.json)
+    console.log('APP apiJSON:', this.state.apiJSON)
+    console.log('APP cenVar:', this.state.censusVariable)
 
     return (
       <div>
         <h1>Census Data Visualizer</h1>
-        <Map
-          {...this.state}
-          {...styles} />
+        <Map {...this.state} {...styles} />
 
       </div>
     ) //end return
