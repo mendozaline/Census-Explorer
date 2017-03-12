@@ -36,7 +36,7 @@ class App extends Component {
     let apiURL = baseURL + censusVariable + county + state + key
     //console.log('APP apiURL:', apiURL)
 
-    const usaCountyJSON =  'https://gist.githubusercontent.com/anonymous/3237a4869e2c17e4bd423fb624354363/raw/2ffa1a7d445b04f6dc8297584252009f342366e3/tl_2016_us_county.json'
+    const usaCountyJSON =  'https://gist.githubusercontent.com/mendozaline/d9023583f18de57b8a9a71ce46c44400/raw/21945be2fa914b1a9aafa1d8ab8f9c65217cda85/us-counties.json'
 
     const totalUSPopulation = 'http://api.census.gov/data/2015/acs5?get=NAME,B01001_001E&for=county:*&in=state:*&key=26b5b4ec082f175445482165de0fe191cc145d62'
 
