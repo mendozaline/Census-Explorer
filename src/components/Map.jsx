@@ -15,26 +15,29 @@ var path = (props) => {
   return d3.geoPath().projection(projection)
 }
 
-var xMin = (data) => {
+var findMin = (data) => {
   return d3.min(data, (d) => {
-//    console.log(d[1])
-    return parseInt(d[1],10)
+//    console.log(d.properties.value)
+    return d.properties.value
   })
 }
 
-var xMax = (data) => {
+var findMax = (data) => {
   return d3.max(data, (d) => {
-//    console.log(parseInt(d[1],10))
-    return parseInt(d[1],10)
+//    console.log(d.properties.value)
+    return d.properties.value
   })
 }
 
 var color = (props) => {
-  return d3.scaleThreshold()
-    .domain([xMin(props.data2), xMax(props.data2)])
-    .range(['#fff7f3','#fde0dd','#fcc5c0',
-            '#fa9fb5','#f768a1','#dd3497',
-            '#ae017e','#7a0177','#49006a'])
+//  console.log('min:', findMin(props.json))
+//  console.log('max:', findMax(props.json))
+  return d3.scaleQuantize()
+    .domain([
+      findMin(props.json),
+      findMax(props.json)
+    ])
+    .range(['#feebe2','#fbb4b9','#f768a1','#ae017e'])
 }
 
 export default (props) => {
