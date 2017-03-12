@@ -14,9 +14,17 @@ const renderPaths = (props) => {
       strokeColor = 'white'
     }
 
+    let fillColor = null
+//    console.log(stateObj.properties.value)
+    if (isNaN(stateObj.properties.value)) {
+      fillColor = 'white'
+    } else {
+      fillColor = props.color(stateObj.properties.value)
+    }
+
     const pathProps = {
       d: props.path(stateObj),
-      fill: props.color(stateObj.properties.value),
+      fill: fillColor,
       stroke: strokeColor,
       opacity: 1.0,
       key: index,
