@@ -2,13 +2,12 @@ import React, { Component } from 'react'
 import './App.css'
 import Map from './components/Map.jsx'
 import * as d3 from 'd3'
-//import json from './mexicanStates.json'
 
 //for svg
 const styles = {
-  width   : 750,
-  height  : 500,
-  padding : 10,
+  width: parseInt(d3.select('body').style('width'), 10) * .8,
+  height: parseInt(d3.select('body').style('width'), 10) / 1.5,
+  padding: 10,
 }
 
 class App extends Component {
@@ -47,6 +46,7 @@ class App extends Component {
       .defer(d3.json, totalUSPopulation)
       .await(function(error, usaJSON, apiData, popData) {
         //Loops through data and adds value to match in usaJSON
+
         for (var i = 0; i < apiData.length; i++) {
           //from the api
           let apiCountyFIP = apiData[i][3]
@@ -126,6 +126,9 @@ class App extends Component {
     return (
       <div>
         <h1>Census Data Visualizer</h1>
+        <br />
+        <h3>Visualize the data!</h3>
+        <br />
         <div>
           <select
             value={this.state.censusVariable}
