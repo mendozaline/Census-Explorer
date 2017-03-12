@@ -6,15 +6,15 @@ const renderPaths = (props) => {
 //    console.log('PATH stateObj.prop:', stateObj.properties)
 
     let strokeColor = null
-    if (stateObj.properties.NAMELSAD === 'Imperial County') {
+    if (stateObj.properties.NAME === 'Deschutes') {
       strokeColor = 'limeGreen'
     } else {
       strokeColor = 'gainsboro'
     }
 
     let strokeWidth = null
-    if (stateObj.properties.NAMELSAD === 'Imperial County') {
-      strokeWidth = 1.5
+    if (stateObj.properties.NAME === 'Deschutes') {
+      strokeWidth = 2
     } else {
       strokeWidth = .75
     }
@@ -37,7 +37,7 @@ const renderPaths = (props) => {
     return (
       <path {...pathProps} >
         <title>
-          {stateObj.properties.NAMELSAD}: {stateObj.properties.apiValue}
+          {stateObj.properties.NAME} County: {stateObj.properties.apiValue}
         </title>
       </path>
     )
