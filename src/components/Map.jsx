@@ -2,17 +2,18 @@ import React from 'react'
 import * as d3 from 'd3'
 import Path from './Path.jsx'
 
-var projection = d3.geoConicConformal()
-  .rotate([98, 0])
-  .center([11, 40])
-  .parallels([29.5, 45.5])
-  .scale(1000)
-  .translate([500, 225])
-  .precision(.1)
-
 var path = (props) => {
   //console.log('MAP props:', props)
-  return d3.geoPath().projection(projection)
+  //console.log('MAP props w:', props.width)
+  return d3.geoPath().projection(
+    d3.geoConicConformal()
+      .rotate([98, 0])
+      .center([15, 24]) //l↑ r↓  u↓ d↑
+      .parallels([29.5, 45.5])
+      .scale(props.width * 1.7)  //↑b
+      .translate([props.width, props.height])
+      .precision(.1)
+  )
 }
 
 var findMin = (data) => {
@@ -44,7 +45,12 @@ var color = (props) => {
 
 export default (props) => {
   if (props.apiJSON === null) {
-    return <p>MAP: Waiting for a variable...</p>
+    return (
+      <div>
+        <br />
+        <h4>Waiting for a variable selection...</h4>
+      </div>
+    )
   }
 
   const scales = {
@@ -52,7 +58,7 @@ export default (props) => {
     path: path(props),
   }
 
-//  console.log('MAP props', props)
+  console.log('MAP props', props)
 
   return (
     <svg width={props.width} height={props.height}>
