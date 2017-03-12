@@ -1,10 +1,7 @@
 .App {
   text-align: center;
-}
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+  margin: auto;
+/*  border: 4px solid dodgerBlue;*/
 }
 
 .App-header {
@@ -18,7 +15,26 @@
   font-size: large;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+svg {
+  border: 1px solid crimson;
+  margin: auto;
+  width: 99%;
+}
+
+h1 {
+  color: crimson;
+  margin: auto;
+  max-width: 1000px;
+  text-align: center;
+}
+
+h2, h3, h4 {
+  margin: auto;
+  max-width: 1000px;
+  text-align: center;
+}
+
+select, input {
+  display: block;
+  margin: auto;
 }
