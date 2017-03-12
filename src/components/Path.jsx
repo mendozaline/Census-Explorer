@@ -2,38 +2,42 @@ import React from 'react'
 
 const renderPaths = (props) => {
 //  console.log('PATH props:', props)
-//  console.log('PATH props.json:', props.json)
-
   return (stateObj, index) => {
-//    console.log('stateObjPro:', stateObj.properties)
+//    console.log('PATH stateObj.prop:', stateObj.properties)
 
     let strokeColor = null
-    if (stateObj.properties.NAMELSAD === 'Elko County') {
-      strokeColor = 'dodgerBlue'
+    if (stateObj.properties.NAMELSAD === 'Imperial County') {
+      strokeColor = 'limeGreen'
     } else {
-      strokeColor = 'white'
+      strokeColor = 'gainsboro'
+    }
+
+    let strokeWidth = null
+    if (stateObj.properties.NAMELSAD === 'Imperial County') {
+      strokeWidth = 1.5
+    } else {
+      strokeWidth = .75
     }
 
     let fillColor = null
-//    console.log(stateObj.properties.value)
-    if (isNaN(stateObj.properties.value)) {
-      fillColor = 'white'
+    if (isNaN(stateObj.properties.apiValue)) {
+      fillColor = 'black'
     } else {
-      fillColor = props.color(stateObj.properties.value)
+      fillColor = props.color(stateObj.properties.apiValue)
     }
 
     const pathProps = {
       d: props.path(stateObj),
       fill: fillColor,
       stroke: strokeColor,
-      opacity: 1.0,
+      strokeWidth: strokeWidth,
       key: index,
     }
 
     return (
       <path {...pathProps} >
         <title>
-          {stateObj.properties.NAMELSAD}: {stateObj.properties.value}
+          {stateObj.properties.NAMELSAD}: {stateObj.properties.apiValue}
         </title>
       </path>
     )
@@ -41,15 +45,11 @@ const renderPaths = (props) => {
 } //end renderPaths
 
 export default (props) => {
-  if (!props.json) {
-    return <p>Loading...</p>
-  }
-
-//  console.log('PATH props.json:', props.json)
+//  console.log('PATH props.apiJSON:', props.apiJSON)
 
   return (
     <g>
-      { props.json.map(renderPaths(props)) }
+      { props.apiJSON.map(renderPaths(props)) }
     </g>
   )
 }
