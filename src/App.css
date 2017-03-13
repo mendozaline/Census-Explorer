@@ -38,3 +38,24 @@ select, input {
   display: block;
   margin: auto;
 }
+
+#tooltip {
+  border-radius: 5px;
+  box-shadow: 1px 1px 5px gray;
+  background-color: white;
+  opacity: 1.0;
+  position: absolute;
+  pointer-events: none;
+  height: auto;
+  width: 225px;
+}
+
+#tooltip.hidden {
+  display: none;
+}
+
+#tooltip p {
+  font-family: sans-serif;
+  font-size: 15px;
+  margin-left: 5px;
+}

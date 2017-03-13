@@ -2,7 +2,7 @@ import React from 'react'
 import * as d3 from 'd3'
 import Path from './Path.jsx'
 
-var path = (props) => {
+let path = (props) => {
   //console.log('MAP props:', props)
   //console.log('MAP props w:', props.width)
   return d3.geoPath().projection(
@@ -16,21 +16,21 @@ var path = (props) => {
   )
 }
 
-var findMin = (data) => {
+let findMin = (data) => {
   return d3.min(data, (d) => {
     //console.log(MAP d.properties.apiValue)
     return d.properties.apiValue
   })
 }
 
-var findMax = (data) => {
+let findMax = (data) => {
   return d3.max(data, (d) => {
     //console.log(MAP d.properties.apiValue)
     return d.properties.apiValue
   })
 }
 
-var color = (props) => {
+let color = (props) => {
   console.log('MAP min:', findMin(props.apiJSON))
   console.log('MAP max:', findMax(props.apiJSON))
   return d3.scaleQuantize()
@@ -61,8 +61,18 @@ export default (props) => {
   console.log('MAP props', props)
 
   return (
-    <svg width={props.width} height={props.height}>
-      <Path {...props} {...scales} />
-    </svg>
+    <div>
+      <div id='tooltip' className='hidden'>
+        <p>
+          County: <span id='value1'></span>
+          <br/>
+          Value: <span id='value2'></span>
+        </p>
+      </div>
+
+      <svg width={props.width} height={props.height}>
+        <Path {...props} {...scales} />
+      </svg>
+    </div>
   )
 }
