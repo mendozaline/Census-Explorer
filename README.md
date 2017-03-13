@@ -4,3 +4,5 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 This app allows you to map data from the U.S. Census Bureau's [American Community Survey](https://www.census.gov/programs-surveys/acs/) using React and D3.js.
 
 It's still a work in progress...
+
+![screenshot-2017-03-12](https://i.imgur.com/KsKaRSV.png)
