@@ -31,10 +31,16 @@ const renderPaths = (props) => {
       //console.log('name: ', stateObj.properties.NAME)
       //console.log('apiValue: ', stateObj.properties.apiValue)
       //console.log('pageX:', event.pageX)
-      //console.log('pageY:', event.pageY)
+
+      let pageXAdjustment = null
+      if (event.pageX > 450) {
+        pageXAdjustment = event.pageX - 250
+      } else {
+        pageXAdjustment = event.pageX + 45
+      }
 
       d3.select('#tooltip')
-        .style('left', (event.pageX) + 45 + 'px')
+        .style('left', pageXAdjustment + 'px')
         .style('top', (event.pageY - 45) + 'px')
 
       d3.select('#value1')
