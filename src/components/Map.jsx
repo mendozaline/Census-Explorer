@@ -64,7 +64,7 @@ export default (props) => {
     <div>
       <div id='tooltip' className='hidden'>
         <p>
-          County: <span id='value1'></span>
+          Name: <span id='value1'></span>
           <br/>
           Value: <span id='value2'></span>
         </p>
