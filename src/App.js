@@ -59,6 +59,11 @@ class App extends Component {
           let percent = (dataValue1/dataValue2) * 100
           //console.log('APP percent:', percent)
 
+          //add county, state property
+          //console.log('APP apiData:', apiData)
+          let countyState = apiData[i][0]
+          //console.log('APP countyState:', countyState)
+
           for (var j = 0; j < usaJSON.features.length; j++) {
             //from geoJSON
             let jsonCountyFIP = usaJSON.features[j].properties.COUNTYFP
@@ -67,6 +72,7 @@ class App extends Component {
 
             if (apiCountyCode === jsonCountyCode) {
               usaJSON.features[j].properties.apiValue = percent
+              usaJSON.features[j].properties.countyState = countyState
               break
             }
           }
