@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './App.css'
 import Map from './components/Map.jsx'
+import Dropdown from './components/Dropdown.jsx'
 import * as d3 from 'd3'
 
 //for svg
@@ -13,6 +14,8 @@ class App extends Component {
   constructor() {
     super()
 
+    this.receiveCensusVariable = this.receiveCensusVariable.bind(this)
+    this.visualizeClick = this.visualizeClick.bind(this)
     this.callAPI = this.callAPI.bind(this)
 
     this.state = {
@@ -86,6 +89,21 @@ class App extends Component {
     }) //end await
   } //end callAPI
 
+  receiveCensusVariable(censusVar) {
+    console.log('APP censusVar', censusVar)
+
+    console.log('this.state.cenVarB:', this.state.censusVariable)
+    this.setState({
+      censusVariable: censusVar
+    })
+    console.log('this.state.cenVarA:', this.state.censusVariable)
+  }
+
+  visualizeClick() {
+    //console.log('APP ddc censusVar: ', this.state.censusVariable)
+    console.log('click API')
+    this.callAPI()
+  }
 
   render() {
 
@@ -98,6 +116,7 @@ class App extends Component {
         <br />
         <h3>Visualize the data!</h3>
         <br />
+        <Dropdown receiveVar={this.receiveCensusVariable}/>
       </div>
     ) //end return
   } //end render
