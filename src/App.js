@@ -7,7 +7,6 @@ import * as d3 from 'd3'
 const styles = {
   width: parseInt(d3.select('body').style('width'), 10) * .8,
   height: parseInt(d3.select('body').style('width'), 10) / 1.5,
-  padding: 10,
 }
 
 class App extends Component {
@@ -15,14 +14,16 @@ class App extends Component {
     super()
 
     this.callAPI = this.callAPI.bind(this)
-    this.dropdownSelect = this.dropdownSelect.bind(this)
-    this.dropdownClick = this.dropdownClick.bind(this)
 
     this.state = {
       apiJSON: null,
-      censusVariable: 'Please select a variable',
+      censusVariable: null,
     } //end of state
   } //end constructor
+
+  componentWillMount() {
+    this.callAPI()
+  }
 
   callAPI() {
     let cmp = this
@@ -34,7 +35,7 @@ class App extends Component {
     let key = '&key=26b5b4ec082f175445482165de0fe191cc145d62'
 
     let apiURL = baseURL + censusVariable + county + state + key
-    //console.log('APP apiURL:', apiURL)
+    console.log('APP apiURL:', apiURL)
 
     const usaCountyJSON =  'https://gist.githubusercontent.com/mendozaline/d9023583f18de57b8a9a71ce46c44400/raw/21945be2fa914b1a9aafa1d8ab8f9c65217cda85/us-counties.json'
 
@@ -85,49 +86,11 @@ class App extends Component {
     }) //end await
   } //end callAPI
 
-//  componentWillMount() {
-//    this.callAPI()
-//  }
-
-  dropdownSelect(event) {
-    event.preventDefault()
-    //console.log('APP dds evt.target.value:', event.target.value)
-    this.setState({
-      censusVariable: event.target.value
-    })
-  }
-
-  dropdownClick() {
-    //console.log('APP ddc censusVar: ', this.state.censusVariable)
-    this.callAPI()
-  }
 
   render() {
 
     console.log('APP apiJSON:', this.state.apiJSON)
     console.log('APP cenVar:', this.state.censusVariable)
-
-    const censusVarCodes = [
-      {name: '', varCode: ''},
-      {name: 'WHITE ALONE', varCode: 'B01001A_001E'},
-      {name: 'BLACK OR AFRICAN AMERICAN ALONE', varCode: 'B01001B_001E'},
-      {name: 'AMERICAN INDIAN AND ALASKA NATIVE ALONE', varCode: 'B01001C_001E'},
-      {name: 'ASIAN ALONE', varCode: 'B01001D_001E'},
-      {name: 'NATIVE HAWAIIAN AND OTHER PACIFIC ISLANDER ALONE', varCode: 'B01001E_001E'},
-      {name: 'SOME OTHER RACE ALONE', varCode: 'B01001F_001E'},
-      {name: 'TWO OR MORE RACES', varCode: 'B01001G_001E'},
-      {name: 'WHITE ALONE, NOT HISPANIC OR LATINO', varCode: 'B01001H_001E'},
-      {name: 'HISPANIC OR LATINO', varCode: 'B01001I_001E'},
-    ]
-
-    let censusVarDropdown = censusVarCodes.map((cenVarObj, index) => {
-      //console.log('APP cenVarObj', cenVarObj)
-      return (
-        <option key={index} value={cenVarObj.varCode}>
-          {cenVarObj.name}
-        </option>
-      )
-    })
 
     return (
       <div>
@@ -135,21 +98,6 @@ class App extends Component {
         <br />
         <h3>Visualize the data!</h3>
         <br />
-        <div>
-          <select
-            value={this.state.censusVariable}
-            onChange={this.dropdownSelect} >
-            {censusVarDropdown}
-          </select>
-
-          <input
-            type='submit'
-            value='Send'
-            onClick={this.dropdownClick} />
-        </div>
-
-        <Map {...this.state} {...styles} />
-
       </div>
     ) //end return
   } //end render
