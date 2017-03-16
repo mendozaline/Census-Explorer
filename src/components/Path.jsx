@@ -1,28 +1,36 @@
 import React from 'react'
 import * as d3 from 'd3'
+import styled from 'styled-components'
+
+const Path = styled.path`
+  &:hover {
+    stroke: dodgerBlue;
+    stroke-width: 5.5px;
+  }
+`
 
 const renderPaths = (props) => {
-//  console.log('PATH props:', props)
+  //console.log('PATH props:', props)
   return (stateObj, index) => {
-//    console.log('PATH stateObj.prop:', stateObj.properties)
+    //console.log('PATH stateObj.prop:', stateObj.properties)
 
     let strokeColor = null
     if (stateObj.properties.NAME === 'Coconino') {
-      strokeColor = 'limeGreen'
+      strokeColor = 'gainsboro'
     } else {
       strokeColor = 'gainsboro'
     }
 
     let strokeWidth = null
     if (stateObj.properties.NAME === 'Coconino') {
-      strokeWidth = 2
+      strokeWidth = .75
     } else {
       strokeWidth = .75
     }
 
     let fillColor = null
     if (isNaN(stateObj.properties.apiValue)) {
-      fillColor = 'black'
+      fillColor = 'white'
     } else {
       fillColor = props.color(stateObj.properties.apiValue)
     }
@@ -44,17 +52,17 @@ const renderPaths = (props) => {
         .style('top', (event.pageY - 45) + 'px')
 
       d3.select('#value1')
-        .text(stateObj.properties.NAME)
+        .text(stateObj.properties.countyState)
 
       d3.select('#value2')
         .text(stateObj.properties.apiValue)
 
       d3.select('#tooltip').classed('hidden', false);
-    }
+    } //end tooltipOn
 
-    let tooltipOff = function(event) {
+    let tooltipOff = function() {
       d3.select('#tooltip').classed('hidden', true);
-    }
+    } //end tooltipOff
 
     const pathProps = {
       d: props.path(stateObj),
@@ -64,14 +72,15 @@ const renderPaths = (props) => {
       key: index,
       onMouseOver: tooltipOn,
       onMouseLeave: tooltipOff,
+      className: 'counties',
     }
 
     return (
-      <path {...pathProps} >
-        <title>
+      <Path {...pathProps} >
+        {/* <title>
           {stateObj.properties.NAME} County: {stateObj.properties.apiValue}
-        </title>
-      </path>
+        </title> */}
+      </Path>
     )
   }
 } //end renderPaths

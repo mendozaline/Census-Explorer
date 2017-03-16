@@ -1,6 +1,28 @@
 import React from 'react'
 import * as d3 from 'd3'
 import Path from './Path.jsx'
+import styled from 'styled-components'
+
+const Svg = styled.svg`
+//  border: 1px solid crimson;
+  margin: auto;
+  width: 99%;
+`
+const Tooltip = styled.div`
+  border-radius: 5px;
+  box-shadow: 1px 1px 5px gray;
+  background-color: white;
+  opacity: 1.0;
+  position: absolute;
+  pointer-events: none;
+  height: auto;
+  width: 225px;
+`
+const TooltipText = styled.p`
+  font-family: sans-serif;
+  font-size: 15px;
+  margin-left: 5px;
+`
 
 let path = (props) => {
   //console.log('MAP props:', props)
@@ -8,7 +30,7 @@ let path = (props) => {
   return d3.geoPath().projection(
     d3.geoConicConformal()
       .rotate([98, 0])
-      .center([15, 24]) //l↑ r↓  u↓ d↑
+      .center([14.25, 22.25]) //l↑ r↓  u↓ d↑
       .parallels([29.5, 45.5])
       .scale(props.width * 1.7)  //↑b
       .translate([props.width, props.height])
@@ -45,12 +67,7 @@ let color = (props) => {
 
 export default (props) => {
   if (props.apiJSON === null) {
-    return (
-      <div>
-        <br />
-        <h4>Waiting for a variable selection...</h4>
-      </div>
-    )
+    return null
   }
 
   const scales = {
@@ -62,17 +79,17 @@ export default (props) => {
 
   return (
     <div>
-      <div id='tooltip' className='hidden'>
-        <p>
+      <Tooltip id='tooltip' className='hidden'>
+        <TooltipText>
           Name: <span id='value1'></span>
           <br/>
           Value: <span id='value2'></span>
-        </p>
-      </div>
+        </TooltipText>
+      </Tooltip>
 
-      <svg width={props.width} height={props.height}>
+      <Svg width={props.width} height={props.height}>
         <Path {...props} {...scales} />
-      </svg>
+      </Svg>
     </div>
   )
 }
