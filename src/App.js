@@ -3,6 +3,31 @@ import './App.css'
 import Map from './components/Map.jsx'
 import Dropdown from './components/Dropdown.jsx'
 import * as d3 from 'd3'
+import styled from 'styled-components'
+
+const Title = styled.h1`
+  color: crimson;
+  margin: auto;
+  max-width: 1000px;
+  text-align: center;
+`
+
+const SubTitle = styled.h3`
+  margin: auto;
+  max-width: 1000px;
+  text-align: center;
+`
+
+const Button = styled.input`
+  display: block;
+  margin: auto;
+`
+
+const Waiting = styled.h4`
+  margin: auto;
+  max-width: 1000px;
+  text-align: center;
+`
 
 //for svg
 const styles = {
@@ -110,13 +135,34 @@ class App extends Component {
     console.log('APP apiJSON:', this.state.apiJSON)
     console.log('APP cenVar:', this.state.censusVariable)
 
+    let mapComponent;
+    if (this.state.censusVariable === null) {
+      mapComponent = (
+        <Waiting>
+          <br/>
+          Waiting for a variable selection...
+        </Waiting>
+      )
+    } else {
+      mapComponent = (
+        <div>
+        <Button
+          type='submit'
+          value='Visualize It!'
+          onClick={this.visualizeClick} />
+        <Map {...this.state} {...styles} />
+</div>
+        )
+    }
+
     return (
       <div>
-        <h1>Census Data Visualizer</h1>
+        <Title>Census Data Visualizer</Title>
         <br />
-        <h3>Visualize the data!</h3>
+        <SubTitle>Visualize the data!</SubTitle>
         <br />
         <Dropdown receiveVar={this.receiveCensusVariable}/>
+        {mapComponent}
       </div>
     ) //end return
   } //end render
