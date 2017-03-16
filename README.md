@@ -5,4 +5,4 @@ This app allows you to map data from the U.S. Census Bureau's [American Communit
 
 It's still a work in progress...
 
-![screenshot-2017-03-12](https://i.imgur.com/KsKaRSV.png)
+![screenshot-2017-03-15](https://i.imgur.com/4bV6E7I.png)
