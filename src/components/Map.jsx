@@ -1,6 +1,6 @@
 import React from 'react'
 import * as d3 from 'd3'
-import Path from './Path.jsx'
+import PathG from './Path.jsx'
 import styled from 'styled-components'
 
 const Svg = styled.svg`
@@ -67,6 +67,7 @@ let color = (props) => {
 
 export default (props) => {
   if (props.apiJSON === null) {
+    console.log('MAP apiJSON', props.apiJSON)
     return null
   }
 
@@ -88,7 +89,7 @@ export default (props) => {
       </Tooltip>
 
       <Svg width={props.width} height={props.height}>
-        <Path {...props} {...scales} />
+        <PathG {...props} {...scales} />
       </Svg>
     </div>
   )

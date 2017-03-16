@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { Component } from 'react'
+//import React from 'react'
 import * as d3 from 'd3'
 import styled from 'styled-components'
 
@@ -10,7 +11,7 @@ const Path = styled.path`
 `
 
 const renderPaths = (props) => {
-  //console.log('PATH props:', props)
+  console.log('PATH props rdpth:', props)
   return (stateObj, index) => {
     //console.log('PATH stateObj.prop:', stateObj.properties)
 
@@ -39,6 +40,7 @@ const renderPaths = (props) => {
       //console.log('name: ', stateObj.properties.NAME)
       //console.log('apiValue: ', stateObj.properties.apiValue)
       //console.log('pageX:', event.pageX)
+//      console.log('index:', index)
 
       let pageXAdjustment = null
       if (event.pageX > 450) {
@@ -137,12 +139,25 @@ const renderPaths = (props) => {
   }
 } //end renderPaths
 
-export default (props) => {
-  console.log('PATH props.apiJSON:', props.apiJSON)
 
-  return (
-    <g>
-      { props.apiJSON.map(renderPaths(props)) }
-    </g>
-  )
-}
+
+
+
+export default class PathG extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+    } //end state
+  } //end constructor
+
+  render() {
+  console.log('PATH props.apiJSON!:', this.props.apiJSON)
+
+    return(
+      <g>
+        { this.props.apiJSON.map(renderPaths(this.props)) }
+      </g>
+    ) //end return
+  } //end render
+} //end Path Counties
