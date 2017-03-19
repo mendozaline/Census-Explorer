@@ -1,6 +1,6 @@
 import React from 'react'
 import * as d3 from 'd3'
-import PathG from './Path.jsx'
+import G from './Path.jsx'
 import styled from 'styled-components'
 
 const Svg = styled.svg`
@@ -89,7 +89,7 @@ export default (props) => {
       </Tooltip>
 
       <Svg width={props.width} height={props.height}>
-        <PathG {...props} {...scales} />
+        <G {...props} {...scales} />
       </Svg>
     </div>
   )
