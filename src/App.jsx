@@ -18,17 +18,6 @@ const SubTitle = styled.h3`
   text-align: center;
 `
 
-const Button = styled.input`
-  display: block;
-  margin: auto;
-`
-
-const Waiting = styled.h4`
-  margin: auto;
-  max-width: 1000px;
-  text-align: center;
-`
-
 //for svg
 const styles = {
   width: parseInt(d3.select('body').style('width'), 10) * .8,
@@ -39,13 +28,10 @@ class App extends Component {
   constructor() {
     super()
 
-    this.receiveCensusVariable = this.receiveCensusVariable.bind(this)
-    this.visualizeClick = this.visualizeClick.bind(this)
     this.callAPI = this.callAPI.bind(this)
 
     this.state = {
       apiJSON: null,
-      censusVariable: null,
     } //end of state
   } //end constructor
 
@@ -53,55 +39,56 @@ class App extends Component {
 //    this.callAPI()
 //  }
 
-  callAPI() {
+  callAPI(varCen, varState) {
+    console.log('API varCen:', varCen)
+    console.log('API varState:', varState)
+
     let cmp = this
 
-    let baseURL = 'http://api.census.gov/data/2015/acs5?get=NAME,'
-    let censusVariable = this.state.censusVariable
-    let county = '&for=county:*'
-    let state = '&in=state:*'
-    let key = '&key=26b5b4ec082f175445482165de0fe191cc145d62'
+    let state = varState === '' ? '&in=state:*' : '&in=state:' + varState
 
-    let apiURL = baseURL + censusVariable + county + state + key
+    let apiURL = `http://api.census.gov/data/2015/acs5?get=NAME,${varCen}&for=county:*${state}&key=26b5b4ec082f175445482165de0fe191cc145d62`
     console.log('APP apiURL:', apiURL)
 
     const usaCountyJSON =  'https://gist.githubusercontent.com/mendozaline/d9023583f18de57b8a9a71ce46c44400/raw/21945be2fa914b1a9aafa1d8ab8f9c65217cda85/us-counties.json'
 
-    const totalUSPopulation = 'http://api.census.gov/data/2015/acs5?get=NAME,B01001_001E&for=county:*&in=state:*&key=26b5b4ec082f175445482165de0fe191cc145d62'
+    const totalUSPopulation = `http://api.census.gov/data/2015/acs5?get=NAME,B01001_001E&for=county:*${state}&key=26b5b4ec082f175445482165de0fe191cc145d62`
+    console.log('API popURL:', totalUSPopulation)
 
     d3.queue()
       .defer(d3.json, usaCountyJSON)
       .defer(d3.json, apiURL)
       .defer(d3.json, totalUSPopulation)
-      .await(function(error, usaJSON, apiData, popData) {
-        //Loops through data and adds value to match in usaJSON
+      .await(function(error, countyJSON, apiData, popData) {
+      //Loops through data and adds value to match in countyJSON
 
         for (var i = 0; i < apiData.length; i++) {
-          //from the api
+          //from the api - match w/ geojson
           let apiCountyFIP = apiData[i][3]
           let apiStateFIP = apiData[i][2]
           let apiCountyCode = apiCountyFIP + ':' + apiStateFIP
           //console.log('APP dataCountryCode:', dataCountryCode)
 
+          //normalize data
           let dataValue1 = +apiData[i][1]
           let dataValue2 = +popData[i][1]
           let percent = (dataValue1/dataValue2) * 100
           //console.log('APP percent:', percent)
 
-          //add county, state property
+          //add 'county, state' property
           //console.log('APP apiData:', apiData)
           let countyState = apiData[i][0]
           //console.log('APP countyState:', countyState)
 
-          for (var j = 0; j < usaJSON.features.length; j++) {
-            //from geoJSON
-            let jsonCountyFIP = usaJSON.features[j].properties.COUNTYFP
-            let jsonStateFIP = usaJSON.features[j].properties.STATEFP
+          for (var j = 0; j < countyJSON.features.length; j++) {
+            //from geoJSON - match w/ api
+            let jsonCountyFIP = countyJSON.features[j].properties.COUNTYFP
+            let jsonStateFIP = countyJSON.features[j].properties.STATEFP
             let jsonCountyCode = jsonCountyFIP + ':' + jsonStateFIP
 
             if (apiCountyCode === jsonCountyCode) {
-              usaJSON.features[j].properties.apiValue = percent
-              usaJSON.features[j].properties.countyState = countyState
+              countyJSON.features[j].properties.apiValue = percent
+              countyJSON.features[j].properties.countyState = countyState
               break
             }
           }
@@ -109,60 +96,22 @@ class App extends Component {
         } //end for loops
 
         cmp.setState({
-          apiJSON: usaJSON.features,
+          apiJSON: countyJSON.features,
         }) //end setState
+
     }) //end await
   } //end callAPI
 
-  receiveCensusVariable(censusVar) {
-    console.log('APP receive censusVar', censusVar)
-
-//    console.log('this.state.cenVarB:', this.state.censusVariable)
-    this.setState({
-      censusVariable: censusVar
-    })
-//    console.log('this.state.cenVarA:', this.state.censusVariable)
-  }
-
-  visualizeClick() {
-    console.log('APP vizClick censusVar: ', this.state.censusVariable)
-    console.log('click API')
-    this.callAPI()
-  }
-
   render() {
-
     console.log('APP render apiJSON:', this.state.apiJSON)
-    console.log('APP render censusVar:', this.state.censusVariable)
-
-    let mapComponent;
-    if (this.state.censusVariable === null) {
-      mapComponent = (
-        <Waiting>
-          <br/>
-          Waiting for a variable selection...
-        </Waiting>
-      )
-    } else {
-      mapComponent = (
-        <div>
-        <Button
-          type='submit'
-          value='Visualize It!'
-          onClick={this.visualizeClick} />
-        <Map {...this.state} {...styles} />
-</div>
-        )
-    }
 
     return (
       <div>
         <Title>Census Data Visualizer</Title>
-        <br />
         <SubTitle>Visualize the data!</SubTitle>
         <br />
-        <Dropdown receiveVar={this.receiveCensusVariable}/>
-        {mapComponent}
+        <Dropdown callAPI={this.callAPI} />
+        <Map {...this.state} {...styles} />
       </div>
     ) //end return
   } //end render
