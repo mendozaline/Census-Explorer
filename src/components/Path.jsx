@@ -27,14 +27,14 @@ export default (props) => {
 
             let pageXAdjustment = null
             if (event.pageX > 450) {
-              pageXAdjustment = event.pageX - 250
+              pageXAdjustment = event.pageX - 350
             } else {
               pageXAdjustment = event.pageX + 45
             }
 
             d3.select('#tooltip')
               .style('left', pageXAdjustment + 'px')
-              .style('top', (event.pageY - 45) + 'px')
+              .style('top', (event.pageY - 175) + 'px')
 
             d3.select('#value1')
               .text(stateObj.properties.countyState)
