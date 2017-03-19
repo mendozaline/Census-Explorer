@@ -10,6 +10,8 @@ const VariableSelect = styled.div`
 `
 
 const Select = styled.select`
+  display: block;
+  margin: auto;
   width: 50%;
 `
 
@@ -27,29 +29,32 @@ export default class Dropdown extends Component {
 
     this.state = {
       censusVariable: '',
+      stateVariable: '',
     }
   }
 
   dropdownSelect(event) {
     event.preventDefault()
-    console.log('APP dds evt.target.value:', event.target.value)
+    let name = event.target.name
+    let value = event.target.value
+    console.log('DROP SELECT ' + name + ': ' + value)
+
     this.setState({
-      censusVariable: event.target.value
+      [name]: value
     })
-    console.log('DROP S censusVar:', this.state.censusVariable)
   }
 
   dropdownClick() {
-    console.log('DROP click')
-    console.log('DROP C censusVar:', this.state.censusVariable)
-    this.props.receiveVar(this.state.censusVariable)
+    console.log('DROP state:', this.state)
+
+    this.props.callAPI(this.state.censusVariable, this.state.stateVariable)
   }
 
   render() {
 //    console.log('DROPDOWN props', this.props)
 
     const censusVarCodes = [
-      {name: '', varCode: ''},
+      {name: 'variable (required)', varCode: ''},
       {name: 'WHITE ALONE', varCode: 'B01001A_001E'},
       {name: 'BLACK OR AFRICAN AMERICAN ALONE', varCode: 'B01001B_001E'},
       {name: 'AMERICAN INDIAN AND ALASKA NATIVE ALONE', varCode: 'B01001C_001E'},
@@ -61,6 +66,18 @@ export default class Dropdown extends Component {
       {name: 'HISPANIC OR LATINO', varCode: 'B01001I_001E'},
     ]
 
+    const stateVarCodes = [
+      {name: 'state (optional)', varCode: ''},
+      {name: 'Oregon', varCode: '41'},
+      {name: 'Alabama', varCode: '01'},
+      {name: 'Alaska', varCode: '02'},
+      {name: 'Arizona', varCode: '04'},
+      {name: 'Arkansas', varCode: '05'},
+      {name: 'California', varCode: '06'},
+      {name: 'Colorado', varCode: '08'},
+
+    ]
+
     let censusVarDropdown = censusVarCodes.map((cenVarObj, index) => {
       //console.log('APP cenVarObj', cenVarObj)
       return (
@@ -70,19 +87,39 @@ export default class Dropdown extends Component {
       )
     })
 
+    let stateVarDropdown = stateVarCodes.map((stVarObj, index) => {
+      //console.log('APP stVarObj', stVarObj)
+      return (
+        <option key={index} value={stVarObj.varCode}>
+          {stVarObj.name}
+        </option>
+      )
+    })
+
     return(
-      <VariableSelect>
-        <Select
-          value={this.state.censusVariable}
-          onChange={this.dropdownSelect} >
-          {censusVarDropdown}
-        </Select>
+      <div>
+        <VariableSelect>
+          <Select
+            value={this.state.censusVariable}
+            name={'censusVariable'}
+            onChange={this.dropdownSelect} >
+            {censusVarDropdown}
+          </Select>
+
+          <Select
+            value={this.state.stateVariable}
+            name={'stateVariable'}
+            onChange={this.dropdownSelect} >
+            {stateVarDropdown}
+          </Select>
+
+        </VariableSelect>
 
         <Button
           type='submit'
           value='Select'
           onClick={this.dropdownClick} />
-      </VariableSelect>
+      </div>
     )
   }
 }
