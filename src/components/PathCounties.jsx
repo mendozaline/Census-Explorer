@@ -16,7 +16,7 @@ export default class PathCounties extends Component {
   }
 
   render() {
-    //console.log('COUNTIES props', this.props.key)
+//    console.log('COUNTIES props', this.props)
 
     return (
       <Path {...this.props} >
@@ -28,6 +28,3 @@ export default class PathCounties extends Component {
 
   }
 }
-
-
-

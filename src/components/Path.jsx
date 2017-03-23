@@ -12,9 +12,16 @@ export default (props) => {
         props.apiJSON.map( (stateObj, index) => {
           //console.log('i', index)
 
+          let strokeColor = null
+          if (stateObj.properties.countyState === 'Harney County, Oregon') {
+            strokeColor = 'limeGreen'
+          } else {
+            strokeColor = 'gainsboro'
+          }
+
           let fillColor = null
           if (isNaN(stateObj.properties.apiValue)) {
-            fillColor = 'white'
+            fillColor = 'black'
           } else {
             fillColor = props.color(stateObj.properties.apiValue)
           }
@@ -105,7 +112,7 @@ export default (props) => {
           const pathProps = {
             d: props.path(stateObj),
             fill: fillColor,
-            stroke: 'gainsboro',
+            stroke: strokeColor,
             strokeWidth: 0.75,
             key: index,
             onMouseOver: tooltipOn,
@@ -115,7 +122,6 @@ export default (props) => {
 
           return (
             <PathCounties
-              {...props}
               {...pathProps} />
           )
         })
