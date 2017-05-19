@@ -117,7 +117,7 @@ export default class Dropdown extends Component {
 
         <Button
           type='submit'
-          value='Select'
+          value='Visualize'
           onClick={this.dropdownClick} />
       </div>
     )

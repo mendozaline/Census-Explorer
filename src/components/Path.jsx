@@ -14,14 +14,14 @@ export default (props) => {
 
           let strokeColor = null
           if (stateObj.properties.countyState === 'Harney County, Oregon') {
-            strokeColor = 'limeGreen'
+            strokeColor = 'gainsboro'
           } else {
             strokeColor = 'gainsboro'
           }
 
           let fillColor = null
           if (isNaN(stateObj.properties.apiValue)) {
-            fillColor = 'black'
+            fillColor = 'white'
           } else {
             fillColor = props.color(stateObj.properties.apiValue)
           }
