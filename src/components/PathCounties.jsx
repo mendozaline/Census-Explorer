@@ -4,7 +4,7 @@ import styled from 'styled-components'
 const Path = styled.path`
   &:hover {
     stroke: dodgerBlue;
-    stroke-width: 5.5px;
+    stroke-width: 2.5;
   }
 `
 
@@ -16,12 +16,12 @@ export default class PathCounties extends Component {
   }
 
   render() {
-//    console.log('COUNTIES props', this.props)
+    //console.log('COUNTIES props', this.props)
 
     return (
       <Path {...this.props} >
         {/* <title>
-          {stateObj.properties.NAME} County: {stateObj.properties.apiValue}
+          County: {this.props.county}
         </title> */}
       </Path>
     )

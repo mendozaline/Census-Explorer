@@ -82,9 +82,9 @@ export default (props) => {
     <div>
       <Tooltip id='tooltip' className='hidden'>
         <TooltipText>
-          Name: <span id='value1'></span>
+          Name: <strong id='value1'></strong>
           <br/>
-          Value: <span id='value2'></span>
+          Value: <strong id='value2'></strong>
         </TooltipText>
       </Tooltip>
 
